@@ -31,14 +31,14 @@ namespace Loan___Emi_Repayment.Controllers
         }
 
         [HttpPost("RePay-Loan")]
-        public async Task<IActionResult> ApplyPayment([FromBody] PaymentHistory ph)
+        public async Task<IActionResult> RepayPayment([FromBody] PaymentHistory ph)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
 
             if (ph.AmountPaid <= 0) return BadRequest("Amount must be greater than zero");
 
 
-            var result = await _unitOfWork.loanService.ApplyLoanPayment(ph.CustomerLoanId, ph.AmountPaid, ph.fkPaidBy);
+            var result = await _unitOfWork.loanService.RepayLoanPayment(ph.CustomerLoanId, ph.AmountPaid, ph.fkPaidBy);
 
             if (result == null) return NotFound("Loan not found");
 
@@ -57,6 +57,16 @@ namespace Loan___Emi_Repayment.Controllers
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
             var result = await _unitOfWork.loanService.UpdateDetails(loan);
+            return Ok(result);
+        }
+
+
+
+        [HttpGet]
+        [Route("GetLoanCustomerReport")]
+        public async Task<IActionResult> GetReport()
+        {
+            var result = await _unitOfWork.loanService.GetReports();
             return Ok(result);
         }
 

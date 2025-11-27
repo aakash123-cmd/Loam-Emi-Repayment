@@ -27,6 +27,7 @@ namespace Loan___Emi_Repayment
             });
             builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddScoped<ILoanService, LoanService>();
+            builder.Services.AddScoped<IEnquiryService, EnquiryService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
