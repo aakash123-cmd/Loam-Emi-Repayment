@@ -33,6 +33,10 @@ namespace Loan___Emi_Repayment
 
             var app = builder.Build();
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> feature1
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
