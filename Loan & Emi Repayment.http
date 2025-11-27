@@ -1,0 +1,6 @@
+@Loan___Emi_Repayment_HostAddress = http://localhost:5151
+
+GET {{Loan___Emi_Repayment_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
