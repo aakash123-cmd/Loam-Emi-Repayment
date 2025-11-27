@@ -33,7 +33,7 @@ namespace Loan___Emi_Repayment
 
             var app = builder.Build();
 
-  
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
