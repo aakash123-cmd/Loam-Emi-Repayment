@@ -16,7 +16,7 @@ namespace Loan___Emi_Repayment.Controllers
         }
 
         [HttpPost]
-        [Route("AddCustomer")]
+        [Route("Add-Customer")]
         public async Task<IActionResult> CreateCustomer([FromBody] Customer customer)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
@@ -30,7 +30,7 @@ namespace Loan___Emi_Repayment.Controllers
 
 
         [HttpPost]
-        [Route("AddCustomersLoan")]
+        [Route("Add-CustomersLoan")]
         public async Task<IActionResult> Create(Customer_Loan_ReqParams cl_req)
         {
             if(!ModelState.IsValid) return ValidationProblem(ModelState);   
@@ -41,7 +41,7 @@ namespace Loan___Emi_Repayment.Controllers
 
 
         [HttpGet]
-        [Route("GetLoanDetailsByCustomerId")]
+        [Route("Get-LoanDetails-By-CustomerId")]
 public async Task<IActionResult> GetDetails(int id)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
@@ -53,14 +53,29 @@ public async Task<IActionResult> GetDetails(int id)
 
 
 
-        //[HttpGet]
-        //[Route("GetCustomerById")]
-        //public async Task<IActionResult> GetById(int Id)
-        //{
-        //    if (!ModelState.IsValid) return ValidationProblem(ModelState);
-        //    var result = await _unitOfWork.customerService.GetById(Id);
-        //    if(result == null) return NotFound();
-        //    return Ok(result);
-        //}
+        [HttpGet]
+        [Route("Display-Customer-Details-ById")]
+        public async Task<IActionResult> GetById(int Id)
+        {
+            if (!ModelState.IsValid) return ValidationProblem(ModelState);
+            var result = await _unitOfWork.customerService.GetById(Id);
+            if (result == null) return NotFound();
+            return Ok(result);
+        }
+
+
+        [HttpGet]
+        [Route("Display-All-Customer-Details")]
+        public async Task<List<Customer>> GetDetails() => await _unitOfWork.customerService.GetDetails();
+
+
+        [HttpPatch]
+        [Route("Update-CustomerDetails")]
+        public async Task<IActionResult> Update(Customer customer)
+        {
+            if (!ModelState.IsValid) return ValidationProblem(ModelState);
+            var result = await _unitOfWork.customerService.UpdateDetails(customer);
+            return Ok(result);
+        }
     }
 }

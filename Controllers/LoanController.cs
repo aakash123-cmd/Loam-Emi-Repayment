@@ -19,7 +19,7 @@ namespace Loan___Emi_Repayment.Controllers
 
 
         [HttpPost]
-        [Route("AddLoan")]
+        [Route("Add-Loan")]
         public async Task<IActionResult> Create(Loan loan)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
@@ -30,7 +30,7 @@ namespace Loan___Emi_Repayment.Controllers
 
         }
 
-        [HttpPost("apply")]
+        [HttpPost("RePay-Loan")]
         public async Task<IActionResult> ApplyPayment([FromBody] PaymentHistory ph)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
@@ -47,12 +47,12 @@ namespace Loan___Emi_Repayment.Controllers
 
 
         [HttpGet]
-        [Route("GetAllLoanDetail")]
+        [Route("Get-All-LoanDetail")]
         public async Task<List<Loan>> GetDetails() => await _unitOfWork.loanService.GetDetails();
 
 
         [HttpPatch]
-        [Route("Updateloandetail")]
+        [Route("Update-LoanDetail")]
         public async Task<IActionResult> UpdateDetails(Loan loan)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
