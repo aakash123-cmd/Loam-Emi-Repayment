@@ -2,6 +2,7 @@
 using Loan___Emi_Repayment.DATAACCESS.ApplicationDbContext;
 using Loan___Emi_Repayment.DATAACCESS.IRepository;
 using Loan___Emi_Repayment.DATAACCESS.Repository;
+using Loan___Emi_Repayment.Middleware;
 using Microsoft.EntityFrameworkCore;
 
 namespace Loan___Emi_Repayment
@@ -34,6 +35,7 @@ namespace Loan___Emi_Repayment
             var app = builder.Build();
 
 
+            app.UseMiddleware<ExceptionMiddleware>();
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
