@@ -2,6 +2,8 @@
 using Loan___Emi_Repayment.MODELS;
 using Microsoft.AspNetCore.Mvc;
 
+
+
 namespace Loan___Emi_Repayment.Controllers
 {
     [ApiController]
@@ -55,5 +57,12 @@ namespace Loan___Emi_Repayment.Controllers
             return Ok(result);  
 
         }
+
+        [HttpGet("test-exception")]
+        public IActionResult Test()
+        {
+            throw new Exception("Test exception from controller");
+        }
+
     }
 }
