@@ -55,5 +55,8 @@ namespace Loan___Emi_Repayment.Controllers
             return Ok(result);  
 
         }
+
+       
+
     }
 }
