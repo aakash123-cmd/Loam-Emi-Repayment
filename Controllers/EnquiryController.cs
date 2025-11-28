@@ -58,11 +58,7 @@ namespace Loan___Emi_Repayment.Controllers
 
         }
 
-        [HttpGet("test-exception")]
-        public IActionResult Test()
-        {
-            throw new Exception("Test exception from controller");
-        }
+       
 
     }
 }
