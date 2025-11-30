@@ -2,10 +2,14 @@
 using Loan___Emi_Repayment.MODELS;
 using Microsoft.AspNetCore.Mvc;
 using Loan___Emi_Repayment.UTILITY;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Loan___Emi_Repayment.Controllers
 {
-    public class EmployeeController : Controller
+    [ApiController]
+    [Authorize]
+
+    public class EmployeeController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _config;
@@ -27,12 +31,10 @@ namespace Loan___Emi_Repayment.Controllers
             employee.Password = employee.Password;
 
             var result = await _unitOfWork.employeeService.Register(employee);
-            return Ok(new
-            {
-                Message = "Employee Registered Successfully",
-                EmployeeId = result.EmployeeId
+            if (result > 0)
+                return Ok("Employee registered successfully");
 
-            });
+            return BadRequest("Failed to register employee");
 
         }
 

@@ -1,44 +1,57 @@
-﻿using Loan___Emi_Repayment.UTILITY;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.Data;
-using Microsoft.AspNetCore.Mvc;
+﻿using Loan___Emi_Repayment.DATAACCESS.IRepository;
+using Loan___Emi_Repayment.MODELS;
 using Loan___Emi_Repayment.UTILITY;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-
-namespace StudentAppApi.Controllers
+namespace Loan___Emi_Repayment.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _config;
 
-        public AuthController(IConfiguration config)
+        public AuthController(IUnitOfWork unitOfWork, IConfiguration config)
         {
+            _unitOfWork = unitOfWork;
             _config = config;
         }
 
+       
         [HttpPost("login")]
         [AllowAnonymous]
-        public IActionResult Login(LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginDTO login)
         {
-            // TODO: Validate from DB
-            if (request.Email == "sagar@gmail.com" && request.Password == "123456")
-            {
-                var token = JwtTokenHelper.GenerateToken(request.Email, _config);
-                return Ok(new { token });
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            return Unauthorized(new { message = "Invalid credentials" });
+            // DB validation
+            var employee = await _unitOfWork.employeeService.Login(login.EmailId!, login.Password!);
+
+            if (employee == null)
+                return Unauthorized(new { Message = "Invalid Email or Password" });
+
+            // Generate JWT Token
+            var token = JwtTokenHelper.GenerateToken(employee.EmailId!, _config);
+
+            return Ok(new
+            {
+                Message = "Login Successful",
+                Token = token,
+                Role = employee.Role
+            });
         }
 
-
-        [HttpGet("secure-data")]
-        public IActionResult SecureData()
+        // ----------------------------------------------------
+        // CHECK TOKEN / SECURE ENDPOINT
+        // ----------------------------------------------------
+        [HttpGet("check-auth")]
+        [Authorize]
+        public IActionResult CheckAuthorization()
         {
-            return Ok("You accessed secured API!");
+            return Ok("Token Valid Hai. Employee Authorized Hai!");
         }
     }
-
 }

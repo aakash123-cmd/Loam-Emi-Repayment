@@ -1,13 +1,16 @@
 ﻿using Loan___Emi_Repayment.DATAACCESS.IRepository;
 using Loan___Emi_Repayment.DATAACCESS.Repository;
 using Loan___Emi_Repayment.MODELS;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Loan___Emi_Repayment.Controllers
 {
     [ApiController]
+  
     [Route("[controller]")]
-    public class LoanController : Controller
+    [Authorize]
+    public class LoanController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
         public LoanController(IUnitOfWork unitOfWork)
