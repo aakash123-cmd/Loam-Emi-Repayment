@@ -24,34 +24,44 @@ namespace Loan___Emi_Repayment.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginDTO login)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            // DB validation
-            var employee = await _unitOfWork.employeeService.Login(login.EmailId!, login.Password!);
-
-            if (employee == null)
-                return Unauthorized(new { Message = "Invalid Email or Password" });
-
-            // Generate JWT Token
-            var token = JwtTokenHelper.GenerateToken(employee.EmailId!, _config);
-
-            return Ok(new
+            try
             {
-                Message = "Login Successful",
-                Token = token,
-                Role = employee.Role
-            });
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                string hashed = BCrypt.Net.BCrypt.HashPassword(login.Password);
+                var result = await _unitOfWork.authService.Login(login.EmailId, login.Password);
+
+
+                if(result == null)
+                {
+                    throw new Exception("Invalid User Details");
+                }
+                bool isCorrect = BCrypt.Net.BCrypt.Verify(login.Password, result.Password);
+                
+                if (isCorrect == false)
+                {
+                    return NotFound(new { Message = "Invalid Email or Password" });
+                }
+
+                // Generate JWT Token
+                var token = JwtTokenHelper.GenerateToken(result.EmailId, result.Role, _config);
+
+                return Ok(new
+                {
+                    Message = "Login Successful",
+                    Token = token,
+                    UserDetail = result
+                });
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // ----------------------------------------------------
-        // CHECK TOKEN / SECURE ENDPOINT
-        // ----------------------------------------------------
-        [HttpGet("check-auth")]
-        [Authorize]
-        public IActionResult CheckAuthorization()
-        {
-            return Ok("Token Valid Hai. Employee Authorized Hai!");
-        }
+        
     }
 }

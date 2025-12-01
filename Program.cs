@@ -1,4 +1,4 @@
-
+ 
 using Loan___Emi_Repayment.DATAACCESS.ApplicationDbContext;
 using Loan___Emi_Repayment.DATAACCESS.IRepository;
 using Loan___Emi_Repayment.DATAACCESS.Repository;
@@ -55,21 +55,20 @@ namespace Loan___Emi_Repayment
 
 
 
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
                 {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
+                      new OpenApiSecurityScheme
+                {
+                      Reference = new OpenApiReference
+                {
+                       Type = ReferenceType.SecurityScheme,
+                       Id = "Bearer"
                 }
             },
-            new string[]{}
-        }
-    });
-            });
+                       new string[]{}
+                }
+       });
+                 });
 
 
 
@@ -98,6 +97,7 @@ namespace Loan___Emi_Repayment
             builder.Services.AddScoped<ILoanService, LoanService>();
             builder.Services.AddScoped<IEnquiryService, EnquiryService>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
@@ -143,8 +143,8 @@ namespace Loan___Emi_Repayment
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+               app.UseSwagger();
+             app.UseSwaggerUI();
             }
 
             app.UseHttpsRedirection();

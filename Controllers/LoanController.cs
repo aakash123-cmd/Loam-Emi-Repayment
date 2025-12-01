@@ -9,7 +9,7 @@ namespace Loan___Emi_Repayment.Controllers
     [ApiController]
   
     [Route("[controller]")]
-    [Authorize]
+
     public class LoanController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -23,6 +23,7 @@ namespace Loan___Emi_Repayment.Controllers
 
         [HttpPost]
         [Route("Add-Loan")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Create(Loan loan)
         {
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
@@ -51,6 +52,8 @@ namespace Loan___Emi_Repayment.Controllers
 
         [HttpGet]
         [Route("Get-All-LoanDetail")]
+        
+
         public async Task<List<Loan>> GetDetails() => await _unitOfWork.loanService.GetDetails();
 
 
@@ -66,7 +69,8 @@ namespace Loan___Emi_Repayment.Controllers
 
 
         [HttpGet]
-        [Route("GetLoanCustomerReport")]
+        [Route("Get-All-Loan-Report")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetReport()
         {
             var result = await _unitOfWork.loanService.GetReports();

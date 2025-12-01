@@ -28,7 +28,8 @@ namespace Loan___Emi_Repayment.Controllers
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
 
             // TODO: Hash password using BCrypt
-            employee.Password = employee.Password;
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(employee.Password);
+             employee.Password = hashedPassword;
 
             var result = await _unitOfWork.employeeService.Register(employee);
             if (result > 0)
@@ -41,24 +42,7 @@ namespace Loan___Emi_Repayment.Controllers
        
 
 
-        [HttpPost]
-        [Route("Employee-Login")]
-        public async Task<IActionResult> Login([FromBody] LoginDTO login)
-        {
-            var result = await _unitOfWork.employeeService.Login(login.EmailId, login.Password);
-
-            if (result == null) return Unauthorized("Invalid Email or Password");
-
-            var token = JwtTokenHelper.GenerateToken(result.EmailId, _config);
-
-            return Ok(new
-            {
-                Message = "Login Successful",
-                Token = token,
-                Role = result.Role
-
-            });
-        }
+       
 
 
         
