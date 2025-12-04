@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Loan___Emi_Repayment.Controllers
 {
     [ApiController]
-    [Authorize]
+
 
     public class EmployeeController : ControllerBase
     {

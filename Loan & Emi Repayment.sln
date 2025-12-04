@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loan & Emi Repayment.Tests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loan & Emi Repayment.UTILITY", "..\Loan & Emi Repayment.UTILITY\Loan & Emi Repayment.UTILITY.csproj", "{B3887C8B-21DB-4664-BC9E-5152260A6BFA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loan & Emi Repayment.UI", "..\Loan & Emi Repayment.UI\Loan & Emi Repayment.UI.csproj", "{C71D1EFE-DB4E-4497-9511-07002BADAC97}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{B3887C8B-21DB-4664-BC9E-5152260A6BFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3887C8B-21DB-4664-BC9E-5152260A6BFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3887C8B-21DB-4664-BC9E-5152260A6BFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C71D1EFE-DB4E-4497-9511-07002BADAC97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C71D1EFE-DB4E-4497-9511-07002BADAC97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C71D1EFE-DB4E-4497-9511-07002BADAC97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C71D1EFE-DB4E-4497-9511-07002BADAC97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

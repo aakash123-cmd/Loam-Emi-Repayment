@@ -7,7 +7,7 @@ namespace Loan___Emi_Repayment.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize]
+
     public class CustomerController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;

@@ -31,7 +31,7 @@ namespace Loan___Emi_Repayment.Controllers
                     return BadRequest(ModelState);
                 }
 
-                string hashed = BCrypt.Net.BCrypt.HashPassword(login.Password);
+              
                 var result = await _unitOfWork.authService.Login(login.EmailId, login.Password);
 
 

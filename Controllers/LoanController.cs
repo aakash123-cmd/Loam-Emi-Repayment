@@ -70,7 +70,7 @@ namespace Loan___Emi_Repayment.Controllers
 
         [HttpGet]
         [Route("Get-All-Loan-Report")]
-        [Authorize(Roles = "Admin")]
+   
         public async Task<IActionResult> GetReport()
         {
             var result = await _unitOfWork.loanService.GetReports();

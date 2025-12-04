@@ -1,5 +1,4 @@
- 
-using Loan___Emi_Repayment.DATAACCESS.ApplicationDbContext;
+﻿using Loan___Emi_Repayment.DATAACCESS.ApplicationDbContext;
 using Loan___Emi_Repayment.DATAACCESS.IRepository;
 using Loan___Emi_Repayment.DATAACCESS.Repository;
 using Loan___Emi_Repayment.Middleware;
@@ -18,16 +17,21 @@ namespace Loan___Emi_Repayment
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // ------------------- CONTROLLERS -------------------
             builder.Services.AddControllers();
 
 
+            // ------------------ CORS ------------------
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowBlazor", policy =>
+                {
+                    policy.WithOrigins("https://localhost:7290")  // your Blazor UI port
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
 
-
-
-            // ------------------- SWAGGER -------------------
-
-
+            // ------------------- Swagger -------------------
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
@@ -37,11 +41,6 @@ namespace Loan___Emi_Repayment
                     Version = "v1"
                 });
 
-
-
-
-
-                //----------------JWT SECURITY IN SWAGGER-----------------------
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
@@ -49,50 +48,31 @@ namespace Loan___Emi_Repayment
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "Enter token like: **Bearer your_token_here**"
+                    Description = "Enter token like: Bearer <your_token>"
                 });
-
-
-
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement {
                 {
-                      new OpenApiSecurityScheme
-                {
-                      Reference = new OpenApiReference
-                {
-                       Type = ReferenceType.SecurityScheme,
-                       Id = "Bearer"
-                }
-            },
-                       new string[]{}
-                }
-       });
-                 });
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[]{}
+                }});
+            });
 
-
-
-
-
-
-
-            // ------------ Database ------------
+            // ----------------- DB -----------------
             builder.Services.AddDbContext<ApplicationDBContext>(o =>
             {
                 var cs = builder.Configuration.GetConnectionString("Default");
                 o.UseMySql(cs, ServerVersion.AutoDetect(cs));
             });
 
-
-
-
-
-
-
-            // ------------------- DEPENDENCY INJECTION -------------------
-
-
-
+            // ----------------- DI -----------------
             builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddScoped<ILoanService, LoanService>();
             builder.Services.AddScoped<IEnquiryService, EnquiryService>();
@@ -100,58 +80,49 @@ namespace Loan___Emi_Repayment
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-
-
-
-
-
-
-            // ------------------- JWT CONFIG -------------------
-
+            // ----------------- JWT -----------------
             builder.Services.AddAuthentication("Bearer").AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
 
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
 
-        IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
-        ),
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
+                    ),
 
-        RoleClaimType = ClaimTypes.Role
-    };
-});
+                    RoleClaimType = ClaimTypes.Role
+                };
+            });
 
             builder.Services.AddAuthorization();
+
             var app = builder.Build();
 
-
-
-
-
-
-
             // ------------------- MIDDLEWARE -------------------
-            
+
             app.UseMiddleware<ExceptionMiddleware>();
-            // Configure the HTTP request pipeline.
+
             if (app.Environment.IsDevelopment())
             {
-               app.UseSwagger();
-             app.UseSwaggerUI();
+                app.UseSwagger();
+                app.UseSwaggerUI();
+
             }
 
             app.UseHttpsRedirection();
+
+            // 🚀 MUST BE BEFORE authentication + controllers 🚀
+            app.UseCors("AllowBlazor");
+
             app.UseAuthentication();
-
             app.UseAuthorization();
-
 
             app.MapControllers();
 
