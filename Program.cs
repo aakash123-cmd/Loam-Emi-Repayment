@@ -118,7 +118,7 @@ namespace Loan___Emi_Repayment
 
             app.UseHttpsRedirection();
 
-            // 🚀 MUST BE BEFORE authentication + controllers 🚀
+            //MUST BE BEFORE authentication + controllers 
             app.UseCors("AllowBlazor");
 
             app.UseAuthentication();
